@@ -11,7 +11,7 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 id = 0
 
 #names related to the index
-names = ['None', 'Thomas', 'Thomas Smiling']
+names = ['None', 'Thomas', 'Thomas Smiling' , 'Tove']
 
 #Intialize and startup the video capture
 
