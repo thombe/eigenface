@@ -1,8 +1,8 @@
 import cv2
 
 cam = cv2.VideoCapture(0)
-cam.set(3, 1280) # video width
-cam.set(4, 720) # video heigth
+cam.set(3, 640) # video width
+cam.set(4, 360) # video heigth
 
 face_detector = cv2.CascadeClassifier(
     '/Users/Thomas/Downloads/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml')

@@ -6,7 +6,8 @@ import os
 #path for face image database
 path = 'dataset'
 
-recognizer = cv2.face.LBPHFaceRecognizer_create()
+#recognizer = cv2.face.LBPHFaceRecognizer_create()
+
 detector = cv2.CascadeClassifier(
     '/Users/Thomas/Downloads/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml')
 
@@ -16,9 +17,15 @@ def getImgaesAndLabels(path):
     faceSamples = []
     ids = []
 
+    #For each picture
     for imagePath in imagePaths:
+
         PIL_img = Image.open(imagePath).convert('L') #convert to gray
         img_numpy = np.array(PIL_img, 'uint8')
+
+        print(img_numpy[0][0])
+
+        #img_numpy is on the form [[255, 254, 255, 0,...,]\n [255,124,123,0,...,]]
 
         id = int(os.path.split(imagePath)[-1].split(".")[1])
 
@@ -38,11 +45,11 @@ print('Training faces. It will take a few seconds. Wait...')
 
 faces,ids = getImgaesAndLabels(path)
 #data = createDataMatrix(faces)
-recognizer.train(faces, np.array(ids))
+#recognizer.train(faces, np.array(ids))
 
 # Save the model into trainer/trainer.yml
 
-recognizer.write('trainer/trainer.yml')
+#recognizer.write('trainer/trainer.yml')
 
 #print the sum of faces trained and en program
 
