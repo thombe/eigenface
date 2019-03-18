@@ -1,8 +1,8 @@
 import cv2
 
 cam = cv2.VideoCapture(0)
-cam.set(3, 640) # video width
-cam.set(4, 480) # video heigth
+cam.set(3, 1280) # video width
+cam.set(4, 720) # video heigth
 
 face_detector = cv2.CascadeClassifier(
     '/Users/Thomas/Downloads/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml')
@@ -31,7 +31,7 @@ while (True):
     k = cv2.waitKey(100) & 0xff # press 'ESC' for exiting video
     if k == 27:
         break
-    elif count >= 5:# take 54 face sample and stop video
+    elif count >= 5:# take 5 face sample and stop video
         break
 
 #Do a bit of cleanup

@@ -19,22 +19,31 @@ def getImgaesAndLabels(path):
     for imagePath in imagePaths:
         PIL_img = Image.open(imagePath).convert('L') #convert to gray
         img_numpy = np.array(PIL_img, 'uint8')
+
         id = int(os.path.split(imagePath)[-1].split(".")[1])
+
         faces = detector.detectMultiScale(img_numpy)
 
         for (x,y,w,h) in faces:
-            faceSamples.append(img_numpy[y:y+h,x:x:x+w])
+            faceSamples.append(img_numpy[y:y+h,x:x+w])
             ids.append(id)
+
     return faceSamples,ids
 
-print("Training faces. It will take a few seconds. Wait...")
 
-faces, ids = getImgaesAndLabels(path)
+
+
+
+print('Training faces. It will take a few seconds. Wait...')
+
+faces,ids = getImgaesAndLabels(path)
+#data = createDataMatrix(faces)
 recognizer.train(faces, np.array(ids))
+
 # Save the model into trainer/trainer.yml
 
 recognizer.write('trainer/trainer.yml')
 
-#print the sumber of faces trained and en program
+#print the sum of faces trained and en program
 
-print("\n {0} faces trained. Exiting program".format(len(np.unique(ids))))
+print('\n {0} faces trained. Exiting program'.format(len(np.unique(ids))))
