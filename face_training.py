@@ -24,12 +24,6 @@ def getImgaesAndLabels(path):
         PIL_img = Image.open(imagePath).convert('L') #convert to gray
         img_numpy = np.array(PIL_img, 'uint8')
 
-        face = []
-        for row in img_numpy:
-            face.append(row)
-
-        facesPCA.append(face)
-
         #img_numpy is on the form [[255, 254, 255, 0,...,]\n [255,124,123,0,...,]]
 
         id = int(os.path.split(imagePath)[-1].split(".")[1])
@@ -49,6 +43,7 @@ def getImgaesAndLabels(path):
 print('Training faces. It will take a few seconds. Wait...')
 
 faces,ids = getImgaesAndLabels(path)
+#cv2.imshow('face' , faces[0])
 #data = createDataMatrix(faces)
 #recognizer.train(faces, np.array(ids))
 
