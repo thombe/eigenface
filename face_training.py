@@ -18,12 +18,17 @@ def getImgaesAndLabels(path):
     ids = []
 
     #For each picture
+    facesPCA = []
     for imagePath in imagePaths:
 
         PIL_img = Image.open(imagePath).convert('L') #convert to gray
         img_numpy = np.array(PIL_img, 'uint8')
 
-        print(img_numpy[0][0])
+        face = []
+        for row in img_numpy:
+            face.append(row)
+
+        facesPCA.append(face)
 
         #img_numpy is on the form [[255, 254, 255, 0,...,]\n [255,124,123,0,...,]]
 
