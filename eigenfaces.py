@@ -18,6 +18,7 @@ ids = np.empty(len(imagePaths) , dtype=int)
 X_t = np.zeros((len(imagePaths),10000) , dtype='f')
 
 count = 0
+names = []
 #For each picture
 for imagePath in imagePaths:
 
@@ -26,6 +27,9 @@ for imagePath in imagePaths:
 
     X_t[count] = img_numpy.ravel()
 
+    name = os.path.split(imagePath)[-1].split(".")[0]
+    if (name not in names):
+        names.append(name)
     id = int(os.path.split(imagePath)[-1].split(".")[1])
 
     ids[count] = id
@@ -36,7 +40,7 @@ for imagePath in imagePaths:
 h = 100
 w = 100
 
-target_names = ['Thomas' , 'ThomasSmile' , 'ThomasSad' , 'Driverlicense']
+#target_names = ['Thomas']
 
 # split into a training and testing set.
 # test_size represents how many of og data used for testing.
@@ -44,7 +48,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_t, ids, test_size=0.0)
 
 
 # Compute a PCA with n_components and whitened for better preformance
-n_components = 100
+n_components = 4
 pca = PCA(n_components=n_components, whiten=True).fit(X_train)
 
 # apply PCA transformation to training data
@@ -78,12 +82,12 @@ while True:
         minSize=(int(minW), int(minH)),
     )
 
-    for(x,y,w,h) in faces:
+    for(x, y, w_f, h_f) in faces:
         #Creates rectangle around face
-        cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
+        cv2.rectangle(img, (x,y), (x + w_f, y + h_f), (0, 255, 0), 2)
 
         #Extracts the face from grayimg, resizes and flattens
-        face = gray[y:y+h,x:x+w]
+        face = gray[y:y + h_f, x:x + w_f]
         face = cv2.resize(face, (100,100))
         face = face.ravel()
 
@@ -91,9 +95,9 @@ while True:
         faceTestPCA = pca.transform(face.reshape(1, -1))
         pred = clf.predict(faceTestPCA)
 
-        print(target_names[pred[0]])
+        print(names[pred[0]])
 
-        cv2.putText(img, str(target_names[pred[0]]), (x+5,y-5), font, 1, (255,255,255) , 2)
+        cv2.putText(img, str(names[pred[0]]), (x+5,y-5), font, 1, (255,255,255) , 2)
 
     cv2.imshow('camera' , img)
     k = cv2.waitKey(10) & 0xff # press 'ESC' to exit
@@ -107,7 +111,7 @@ cv2.destroyAllWindows()
 '''
 print(classification_report(y_test, y_pred, target_names=target_names))
 
-
+'''
 # Visualization
 def plot_gallery(images, titles, h, w, rows=2, cols=2):
     plt.figure()
@@ -123,14 +127,14 @@ def titles(y_pred, y_test, target_names):
         pred_name = target_names[y_pred[i]].split(' ')[-1]
         true_name = target_names[y_test[i]].split(' ')[-1]
         yield 'predicted: {0}\ntrue: {1}'.format(pred_name, true_name)
+'''
 
 prediction_titles = list(titles(y_pred, y_test, target_names))
 plot_gallery(X_test, prediction_titles, h, w)
-
+'''
 
 eigenfaces = pca.components_.reshape((n_components, h, w))
 eigenface_titles = ["eigenface {0}".format(i) for i in range(eigenfaces.shape[0])]
 plot_gallery(eigenfaces, eigenface_titles, h, w)
 
 plt.show()
-'''
